@@ -36,3 +36,6 @@ nosetests.xml
 
 # emacs
 *~
+
+# david stuff
+david.sqlite
