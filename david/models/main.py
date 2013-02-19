@@ -34,7 +34,6 @@ class Contact(Base):
     lastname = Column(Unicode(50))
     email = Column(Unicode(50), unique=True)
     phone = Column(Unicode(20))
-    users = relationship('User')
     
     def __init__(self, firstname='', lastname='', email='', phone=''):
         if firstname:
@@ -52,8 +51,8 @@ class Location(Base):
     name = Column(Unicode(50), unique=True)
     address_id = Column(Integer, ForeignKey('addresses.id'))
     
-    def __init__(self, location=None):
-        self.location = location
+    def __init__(self, name):
+        self.name = name
         
 class Client(Base):
     __tablename__ = 'clients'
