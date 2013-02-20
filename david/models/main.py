@@ -12,7 +12,10 @@ from sqlalchemy import PickleType
 
 
 from sqlalchemy.orm import relationship
+# imports for populate()
+import transaction
 from sqlalchemy.exc import IntegrityError
+from trumpet.models.base import DBSession
 
 from sqlalchemy.orm import relationship, backref
 
@@ -71,7 +74,59 @@ class ClientContact(Base):
     def __init__(self, client_id, contact_id):
         self.client_id = client_id
         self.contact_id = contact_id
+        
+    
+        
+class ClientPayment(Base):
+    __tablename__ = 'client_payments'
+    id = Column(Integer, primary_key=True)
+    date = Column(Date)
+    contact_id = Column(Integer, ForeignKey('contacts.id'), primary_key=True)
+    amount = Column(Integer)
+    check_number = Column(Integer)
+    cash = Column(Boolean)
+
+    def __init__(self, contact_id, amount, check_number, cash):
+        self.contact_id = contact_id
+        self.date = date
+        self.amount = amount
+        self.check_number = check_number
+        self.cash = cash
+
+    
 
 
+#User.groups = relationship(Group, secondary='group_user')
+
+
+def populate_groups():
+    transaction.begin()
+    session = DBSession()
+    contacts = [
+        ('Clark', 'Kent', '601-555-1212', 'superman@jla.org'),
+        ('Bruce', 'Wayne', '601-911-2012', 'batman@bat.cave'),
+        ]
+                        
+    if not session.query(Contact).count():
+        with transaction.manager:
+            for c in contacts:
+                contact = Contact(*c)
+                session.add(contact)
+                
+def populate():
+    popfuns = [populate_groups]
+    for pfun in popfuns:
+        try:
+            pfun()
+        except IntegrityError:
+            transaction.abort()
+
+
+class COntextManager(object):
+    def __start__(self):
+        print "starting"
+
+    def __stop__(self):
+        print "stopping"
 
         

@@ -19,6 +19,7 @@ from trumpet.config.wiki import configure_wiki
 from trumpet.config.rssviewer import configure_rssviewer
 from trumpet.config.login import configure_login
 
+from david.models.main import populate as populate_david
 
 def get_dburl():
     dbhost = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
@@ -42,7 +43,8 @@ def main(global_config, **settings):
     initialize_sql(engine, [populate,
                             populate_wiki,
                             populate_feeds,
-                            populate_sitetext])
+                            populate_sitetext,
+                            populate_david])
     session_factory = session_factory_from_settings(settings)
     root_factory = 'trumpet.resources.RootGroupFactory'
     request_factory = 'trumpet.request.AlchemyRequest'
